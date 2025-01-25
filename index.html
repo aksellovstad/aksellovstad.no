@@ -8,8 +8,7 @@
         body {
             font-family: sans-serif;
             margin: 0;
-            padding: 5px;
-            padding-right: 30px;
+            padding: 5px 20px; /* Let the body handle padding */
             box-sizing: border-box;
             position: relative;
             min-height: 100vh;
@@ -19,21 +18,21 @@
             flex-direction: column;
             justify-content: space-between;
             overflow: hidden;
+            font-size: 14px;
         }
 
         /* Header section */
         header {
-            padding: 5px 20px; /* Added left padding here */
             color: #000;
             text-align: left;
             width: 100%;
-            z-index: 3;
             display: grid;
             grid-template-columns: repeat(6, 1fr);
             gap: 10px;
             background: none;
             position: sticky;
             top: 0;
+            padding: 5px 0; /* Padding controlled by body */
         }
 
         header p {
@@ -46,16 +45,15 @@
 
         /* Footer section */
         footer {
-            padding: 5px 20px; /* Added left padding here */
             color: #000;
             text-align: left;
             width: 100%;
-            z-index: 3;
             display: grid;
             grid-template-columns: repeat(6, 1fr);
             gap: 10px;
             background: none;
             margin-top: auto;
+            padding: 5px 0; /* Padding controlled by body */
         }
 
         footer p {
@@ -72,6 +70,11 @@
             max-height: 50vh;
             max-width: 65%;
             z-index: 1;
+            pointer-events: none;
+            top: 20vh; /* Starts the image 20% down from the top of the page */
+            bottom: 20vh; /* Ensures the image doesn't extend below 20% of the page */
+            left: 50%;
+            transform: translateX(-50%); /* Center the image horizontally */
         }
 
         /* Description section */
@@ -83,20 +86,21 @@
             display: grid;
             grid-template-columns: repeat(6, 1fr);
             gap: 10px;
-            padding: 5px 20px
             z-index: 2;
+            padding: 0;
         }
 
+        /* Columns for description */
         .description .col {
             padding: 10px;
         }
 
-        .description .col:last-child {
-            grid-column: span 3; /* Span the last column across the remaining space */
+        /* Ensure the 4th column spans 2 columns */
+        .description .col:nth-child(4) {
+            grid-column: span 2;
             text-align: left;
         }
 
-        /* Hide the text initially */
         .description p {
             margin: 0;
         }
@@ -129,6 +133,8 @@
         <div class="col">
             <p id="project-description">This project explores design concepts related to typefaces and graphic compositions. It blends traditional methods with modern digital techniques to create a unique visual identity for the project. The result is a harmonious design that represents both the past and the future of graphic design.</p>
         </div>
+        <div class="col"></div> <!-- Empty column for spacing -->
+        <div class="col"></div> <!-- Empty column for spacing -->
     </div>
 
     <script>
@@ -174,11 +180,17 @@
             projectDescriptionElement.innerText = categoryDetails.description;
         }
 
+        // Number of images allowed to be displayed at the same time
+        const maxImages = 5;
+
         function createFixedImage(event) {
+            // Create a new image element
             const newFixedImage = document.createElement('img');
             newFixedImage.src = images[currentImageIndex].src;
             newFixedImage.alt = images[currentImageIndex].description;
             newFixedImage.className = 'fixed-image';
+            newFixedImage.draggable = false;
+            newFixedImage.setAttribute('loading', 'lazy');  // Apply lazy loading
 
             newFixedImage.style.left = `${event.pageX}px`;
             newFixedImage.style.top = `${event.pageY}px`;
@@ -187,6 +199,15 @@
 
             // Update the project details after the image is placed
             updateDescription();
+
+            // Keep track of the total number of images
+            const allImages = document.querySelectorAll('.fixed-image');
+
+            // If there are more than 'maxImages' displayed, remove the oldest one
+            if (allImages.length > maxImages) {
+                const oldestImage = allImages[0];  // The first image added is the oldest
+                oldestImage.remove();
+            }
         }
 
         document.addEventListener('click', (event) => {
