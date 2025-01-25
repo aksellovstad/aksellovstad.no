@@ -8,7 +8,9 @@
         body {
             font-family: sans-serif;
             margin: 0;
-            padding: 0;
+            padding: 5px; /* Equal padding on all sides */
+            padding-right: 30px;
+            box-sizing: border-box; /* Include padding in width/height calculations */
             position: relative;
             min-height: 100vh;
             background-color: #f4f4f9;
@@ -16,31 +18,39 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between; /* Ensure content is spaced out correctly */
+            overflow: hidden; /* Prevent scrolling in both directions */
         }
 
         header {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            text-align: left;
-            z-index: 3;
-        }
-
-        #description {
-            color: #333;
-            margin: 0;
-            position: relative;
-            z-index: 3;
-        }
-
-        footer {
-            padding: 10px 20px;
+            padding: 10px;
             color: #000;
             text-align: left;
             width: 100%;
             z-index: 3;
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
+            background: none;
+            position: sticky; /* Header sticks at the top */
+            top: 0;
+        }
+
+        header p {
+            margin: 0;
+        }
+
+        header p:nth-child(6) {
+            text-align: right; /* Right-align the last column */
+        }
+
+        footer {
+            padding: 10px;
+            color: #000;
+            text-align: left;
+            width: 100%;
+            z-index: 3;
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
             gap: 10px;
             background: none;
             margin-top: auto; /* Ensure it stays at the bottom */
@@ -50,13 +60,8 @@
             margin: 0;
         }
 
-        .cursor-image {
-            position: absolute;
-            object-fit: contain;
-            max-height: 50vh;
-            pointer-events: none;
-            z-index: 999;
-            transition: opacity 0.3s ease;
+        footer p:nth-child(6) {
+            text-align: right; /* Right-align the last column */
         }
 
         .fixed-image {
@@ -69,77 +74,79 @@
 </head>
 <body>
     <header>
-        <p id="description">Hi, I'm [Your Name]! A passionate [Your Profession or Interest].</p>
+        <p>Aksel Løvstad</p>
+        <p>Graphic Design</p>
+        <p>Type Design</p>
+        <p>Contact</p>
+        <p>PDF Portfolio</p>
+        <p>CV</p>
     </header>
 
     <footer>
-        <p>&copy; 2025 Aksel Løvstad Kristensen</p>
+        <p>&copy; 2025 Aksel Løvstad</p>
+        <p></p>
         <p>Org. nr. 923491716</p>
         <p>Jon P Erliens vei 10</p>
+        <p></p>
         <p>Oslo, Norge</p>
     </footer>
 
     <script>
         const images = [
-            { src: './media/visuell-identitet/11-minutter-dektop-1.0.jpg', description: 'First Images' },
+            { src: './media/visuell-identitet/11-minutter-dektop-1.0.jpg', description: 'First Image' },
             { src: './media/visuell-identitet/11-minutter-dektop-2.0.jpg', description: 'Second Image' },
             { src: './media/visuell-identitet/11-minutter-mobile-1.0.jpg', description: 'Third Image' }
         ];
 
-        let currentImageIndex = 0;
-        let floatingImage = null;
-        let lastMouseX = 0;
-        let lastMouseY = 0;
+        const maxPhotos = 5; // Limit to 5 photos
 
-        // Function to create and position the floating image
-        function createFloatingImage(event) {
-            if (floatingImage === null) {
-                floatingImage = document.createElement('img');
-                floatingImage.className = 'cursor-image';
-                document.body.appendChild(floatingImage);
-            }
-            floatingImage.src = images[currentImageIndex].src;
-            floatingImage.alt = images[currentImageIndex].description;
+document.addEventListener('click', (event) => {
+    if (event.button === 0) { // Left click
+        event.preventDefault(); // Prevent text selection during click
 
-            // Position the floating image at the cursor
-            const rect = floatingImage.getBoundingClientRect();
-            floatingImage.style.left = `${event.pageX - rect.width / 2}px`;
-            floatingImage.style.top = `${event.pageY - rect.height / 2}px`;
+        // Create the fixed image at the clicked position
+        createFixedImage(event);
+
+        // Update to the next image
+        currentImageIndex = (currentImageIndex + 1) % images.length;
+
+        // Remove older images if there are more than maxPhotos
+        const allImages = document.querySelectorAll('.fixed-image');
+        if (allImages.length > maxPhotos) {
+            allImages[0].remove(); // Remove the first (oldest) image
         }
+    }
+});
 
-        // Create a fixed image at a specific location
+
+
+
+
+        let currentImageIndex = 0;
+
+        // Function to create a fixed image at the click location
         function createFixedImage(event) {
             const newFixedImage = document.createElement('img');
             newFixedImage.src = images[currentImageIndex].src;
             newFixedImage.alt = images[currentImageIndex].description;
             newFixedImage.className = 'fixed-image';
 
-            const rect = floatingImage.getBoundingClientRect();
-            newFixedImage.style.left = `${event.pageX - rect.width / 2}px`;
-            newFixedImage.style.top = `${event.pageY - rect.height / 2}px`;
+            newFixedImage.style.left = `${event.pageX}px`;
+            newFixedImage.style.top = `${event.pageY}px`;
+            newFixedImage.style.transform = "translate(-50%, -50%)"; // Center image on click
             document.body.appendChild(newFixedImage);
         }
 
-        // Change the image on left click
+        // Change the image on left click and create a fixed image
         document.addEventListener('click', (event) => {
             if (event.button === 0) { // Left click
                 event.preventDefault(); // Prevent text selection during click
-                // Change the current image
-                currentImageIndex = (currentImageIndex + 1) % images.length;
-            }
-        });
 
-        // Create a trail of images every time the mouse moves more than 5px
-        document.addEventListener('mousemove', (event) => {
-            createFloatingImage(event);
-
-            const distance = Math.sqrt(Math.pow(event.pageX - lastMouseX, 2) + Math.pow(event.pageY - lastMouseY, 2));
-            
-            // Only create a new image if the cursor has moved more than 5px
-            if (distance > 5) {
+                // Create the fixed image at the clicked position
                 createFixedImage(event);
-                lastMouseX = event.pageX;
-                lastMouseY = event.pageY;
+
+                // Update to the next image
+                currentImageIndex = (currentImageIndex + 1) % images.length;
             }
         });
     </script>
