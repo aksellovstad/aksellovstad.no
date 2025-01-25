@@ -8,21 +8,22 @@
         body {
             font-family: sans-serif;
             margin: 0;
-            padding: 5px; /* Equal padding on all sides */
+            padding: 5px;
             padding-right: 30px;
-            box-sizing: border-box; /* Include padding in width/height calculations */
+            box-sizing: border-box;
             position: relative;
             min-height: 100vh;
             background-color: #f4f4f9;
             user-select: none;
             display: flex;
             flex-direction: column;
-            justify-content: space-between; /* Ensure content is spaced out correctly */
-            overflow: hidden; /* Prevent scrolling in both directions */
+            justify-content: space-between;
+            overflow: hidden;
         }
 
+        /* Header section */
         header {
-            padding: 10px;
+            padding: 5px 20px; /* Added left padding here */
             color: #000;
             text-align: left;
             width: 100%;
@@ -31,7 +32,7 @@
             grid-template-columns: repeat(6, 1fr);
             gap: 10px;
             background: none;
-            position: sticky; /* Header sticks at the top */
+            position: sticky;
             top: 0;
         }
 
@@ -40,11 +41,12 @@
         }
 
         header p:nth-child(6) {
-            text-align: right; /* Right-align the last column */
+            text-align: right;
         }
 
+        /* Footer section */
         footer {
-            padding: 10px;
+            padding: 5px 20px; /* Added left padding here */
             color: #000;
             text-align: left;
             width: 100%;
@@ -53,7 +55,7 @@
             grid-template-columns: repeat(6, 1fr);
             gap: 10px;
             background: none;
-            margin-top: auto; /* Ensure it stays at the bottom */
+            margin-top: auto;
         }
 
         footer p {
@@ -61,14 +63,42 @@
         }
 
         footer p:nth-child(6) {
-            text-align: right; /* Right-align the last column */
+            text-align: right;
         }
 
         .fixed-image {
             position: absolute;
             object-fit: contain;
             max-height: 50vh;
+            max-width: 65%;
             z-index: 1;
+        }
+
+        /* Description section */
+        .description {
+            position: absolute;
+            top: 75%; /* 2/3 down the screen */
+            left: 0;
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
+            padding: 5px 20px
+            z-index: 2;
+        }
+
+        .description .col {
+            padding: 10px;
+        }
+
+        .description .col:last-child {
+            grid-column: span 3; /* Span the last column across the remaining space */
+            text-align: left;
+        }
+
+        /* Hide the text initially */
+        .description p {
+            margin: 0;
         }
     </style>
 </head>
@@ -91,40 +121,59 @@
         <p>Oslo, Norge</p>
     </footer>
 
+    <!-- Description section -->
+    <div class="description">
+        <div class="col" id="project-name">Project Name</div>
+        <div class="col" id="project-institution">KHiO</div>
+        <div class="col" id="project-year">2024</div>
+        <div class="col">
+            <p id="project-description">This project explores design concepts related to typefaces and graphic compositions. It blends traditional methods with modern digital techniques to create a unique visual identity for the project. The result is a harmonious design that represents both the past and the future of graphic design.</p>
+        </div>
+    </div>
+
     <script>
+        // Categorizing the images by folder
+        const imageCategories = {
+            'visuell-identitet': {
+                name: '11 Minutter', 
+                institution: 'KHiO', 
+                year: '2023', 
+                description: 'This project explores design concepts related to typefaces and graphic compositions.'
+            },
+            'locm': {
+                name: 'List of Common Misconceptions', 
+                institution: 'KHiO', 
+                year: '2024', 
+                description: 'A project exploring visual storytelling and typography, addressing common misconceptions in the design world.'
+            }
+        };
+
+        // List of images with their paths
         const images = [
-            { src: './media/visuell-identitet/11-minutter-dektop-1.0.jpg', description: 'First Image' },
-            { src: './media/visuell-identitet/11-minutter-dektop-2.0.jpg', description: 'Second Image' },
-            { src: './media/visuell-identitet/11-minutter-mobile-1.0.jpg', description: 'Third Image' }
+            { src: './media/visuell-identitet/11-minutter-dektop-1.0.jpg', description: 'First Image', folder: 'visuell-identitet' },
+            { src: './media/visuell-identitet/11-minutter-dektop-2.0.jpg', description: 'Second Image', folder: 'visuell-identitet' },
+            { src: './media/visuell-identitet/11-minutter-mobile-1.0.jpg', description: 'Third Image', folder: 'visuell-identitet' },
+            { src: './media/locm/locm-scan-54-55.png', description: 'Fourth Image', folder: 'locm' }
         ];
-
-        const maxPhotos = 5; // Limit to 5 photos
-
-document.addEventListener('click', (event) => {
-    if (event.button === 0) { // Left click
-        event.preventDefault(); // Prevent text selection during click
-
-        // Create the fixed image at the clicked position
-        createFixedImage(event);
-
-        // Update to the next image
-        currentImageIndex = (currentImageIndex + 1) % images.length;
-
-        // Remove older images if there are more than maxPhotos
-        const allImages = document.querySelectorAll('.fixed-image');
-        if (allImages.length > maxPhotos) {
-            allImages[0].remove(); // Remove the first (oldest) image
-        }
-    }
-});
-
-
-
-
 
         let currentImageIndex = 0;
 
-        // Function to create a fixed image at the click location
+        const projectNameElement = document.getElementById('project-name');
+        const projectInstitutionElement = document.getElementById('project-institution');
+        const projectYearElement = document.getElementById('project-year');
+        const projectDescriptionElement = document.getElementById('project-description');
+
+        function updateDescription() {
+            const currentFolder = images[currentImageIndex].folder;
+            const categoryDetails = imageCategories[currentFolder];
+            
+            // Update project name, institution, year, and description dynamically
+            projectNameElement.innerText = categoryDetails.name;
+            projectInstitutionElement.innerText = categoryDetails.institution;
+            projectYearElement.innerText = categoryDetails.year;
+            projectDescriptionElement.innerText = categoryDetails.description;
+        }
+
         function createFixedImage(event) {
             const newFixedImage = document.createElement('img');
             newFixedImage.src = images[currentImageIndex].src;
@@ -133,14 +182,16 @@ document.addEventListener('click', (event) => {
 
             newFixedImage.style.left = `${event.pageX}px`;
             newFixedImage.style.top = `${event.pageY}px`;
-            newFixedImage.style.transform = "translate(-50%, -50%)"; // Center image on click
+            newFixedImage.style.transform = "translate(-50%, -50%)";
             document.body.appendChild(newFixedImage);
+
+            // Update the project details after the image is placed
+            updateDescription();
         }
 
-        // Change the image on left click and create a fixed image
         document.addEventListener('click', (event) => {
-            if (event.button === 0) { // Left click
-                event.preventDefault(); // Prevent text selection during click
+            if (event.button === 0) {
+                event.preventDefault();
 
                 // Create the fixed image at the clicked position
                 createFixedImage(event);
@@ -149,6 +200,9 @@ document.addEventListener('click', (event) => {
                 currentImageIndex = (currentImageIndex + 1) % images.length;
             }
         });
+
+        // Initialize the first description on page load
+        updateDescription();
     </script>
 </body>
 </html>
