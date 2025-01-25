@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cursor Image Example</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            position: relative;
+            min-height: 100vh;
+            background-color: #f4f4f9;
+            user-select: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* Ensure content is spaced out correctly */
+        }
+
+        header {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            text-align: left;
+            z-index: 3;
+        }
+
+        #description {
+            color: #333;
+            margin: 0;
+            position: relative;
+            z-index: 3;
+        }
+
+        footer {
+            padding: 10px 20px;
+            color: #000;
+            text-align: left;
+            width: 100%;
+            z-index: 3;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            background: none;
+            margin-top: auto; /* Ensure it stays at the bottom */
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        .cursor-image {
+            position: absolute;
+            object-fit: contain;
+            max-height: 50vh;
+            pointer-events: none;
+            z-index: 999;
+            transition: opacity 0.3s ease;
+        }
+
+        .fixed-image {
+            position: absolute;
+            object-fit: contain;
+            max-height: 50vh;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <p id="description">Hi, I'm [Your Name]! A passionate [Your Profession or Interest].</p>
+    </header>
+
+    <footer>
+        <p>&copy; 2025 Aksel Løvstad Kristensen</p>
+        <p>Org. nr. 923491716</p>
+        <p>Jon P Erliens vei 10</p>
+        <p>Oslo, Norge</p>
+    </footer>
+
+    <script>
+        const images = [
+            { src: './media/visuell-identitet/11-minutter-dektop-1.0.jpg', description: 'First Images' },
+            { src: './media/visuell-identitet/11-minutter-dektop-2.0.jpg', description: 'Second Image' },
+            { src: './media/visuell-identitet/11-minutter-mobile-1.0.jpg', description: 'Third Image' }
+        ];
+
+        let currentImageIndex = 0;
+        let floatingImage = null;
+        let lastMouseX = 0;
+        let lastMouseY = 0;
+
+        // Function to create and position the floating image
+        function createFloatingImage(event) {
+            if (floatingImage === null) {
+                floatingImage = document.createElement('img');
+                floatingImage.className = 'cursor-image';
+                document.body.appendChild(floatingImage);
+            }
+            floatingImage.src = images[currentImageIndex].src;
+            floatingImage.alt = images[currentImageIndex].description;
+
+            // Position the floating image at the cursor
+            const rect = floatingImage.getBoundingClientRect();
+            floatingImage.style.left = `${event.pageX - rect.width / 2}px`;
+            floatingImage.style.top = `${event.pageY - rect.height / 2}px`;
+        }
+
+        // Create a fixed image at a specific location
+        function createFixedImage(event) {
+            const newFixedImage = document.createElement('img');
+            newFixedImage.src = images[currentImageIndex].src;
+            newFixedImage.alt = images[currentImageIndex].description;
+            newFixedImage.className = 'fixed-image';
+
+            const rect = floatingImage.getBoundingClientRect();
+            newFixedImage.style.left = `${event.pageX - rect.width / 2}px`;
+            newFixedImage.style.top = `${event.pageY - rect.height / 2}px`;
+            document.body.appendChild(newFixedImage);
+        }
+
+        // Change the image on left click
+        document.addEventListener('click', (event) => {
+            if (event.button === 0) { // Left click
+                event.preventDefault(); // Prevent text selection during click
+                // Change the current image
+                currentImageIndex = (currentImageIndex + 1) % images.length;
+            }
+        });
+
+        // Create a trail of images every time the mouse moves more than 5px
+        document.addEventListener('mousemove', (event) => {
+            createFloatingImage(event);
+
+            const distance = Math.sqrt(Math.pow(event.pageX - lastMouseX, 2) + Math.pow(event.pageY - lastMouseY, 2));
+            
+            // Only create a new image if the cursor has moved more than 5px
+            if (distance > 5) {
+                createFixedImage(event);
+                lastMouseX = event.pageX;
+                lastMouseY = event.pageY;
+            }
+        });
+    </script>
+</body>
+</html>
