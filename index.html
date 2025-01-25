@@ -3,22 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cursor Image Example</title>
+    <title>Aksel Løvstad - Graphic Design</title>
     <style>
+        /* Overall Body Layout */
         body {
             font-family: sans-serif;
             margin: 0;
-            padding: 5px 20px; /* Let the body handle padding */
+            padding: 5px;
             box-sizing: border-box;
             position: relative;
             min-height: 100vh;
             background-color: #f4f4f9;
-            user-select: none;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             overflow: hidden;
             font-size: 14px;
+            user-select: none; /* Disable text selection globally */
+        }
+
+        /* Text selection styles */
+        ::selection {
+            background-color: #000;
+            color: white;
         }
 
         /* Header section */
@@ -32,11 +39,18 @@
             background: none;
             position: sticky;
             top: 0;
-            padding: 5px 0; /* Padding controlled by body */
+            padding: 5px;
+            box-sizing: border-box;
+            z-index: 3;
         }
 
         header p {
             margin: 0;
+            cursor: text; /* Change cursor to text when hovering over text */
+        }
+
+        header p:hover {
+            user-select: text; /* Enable text selection when hovering */
         }
 
         header p:nth-child(6) {
@@ -53,49 +67,56 @@
             gap: 10px;
             background: none;
             margin-top: auto;
-            padding: 5px 0; /* Padding controlled by body */
+            padding: 5px;
+            box-sizing: border-box;
+            z-index: 3;
         }
 
         footer p {
             margin: 0;
+            cursor: text; /* Change cursor to text when hovering over text */
+        }
+
+        footer p:hover {
+            user-select: text; /* Enable text selection when hovering */
         }
 
         footer p:nth-child(6) {
             text-align: right;
         }
 
+        /* Fixed Image */
         .fixed-image {
             position: absolute;
             object-fit: contain;
-            max-height: 50vh;
-            max-width: 65%;
+            max-height: 40vh;
+            max-width: 50%;
             z-index: 1;
             pointer-events: none;
-            top: 20vh; /* Starts the image 20% down from the top of the page */
-            bottom: 20vh; /* Ensures the image doesn't extend below 20% of the page */
-            left: 50%;
-            transform: translateX(-50%); /* Center the image horizontally */
+            transform: translate(-50%, -50%);
         }
 
         /* Description section */
         .description {
             position: absolute;
-            top: 75%; /* 2/3 down the screen */
+            top: 85%;
             left: 0;
             width: 100%;
             display: grid;
             grid-template-columns: repeat(6, 1fr);
             gap: 10px;
             z-index: 2;
-            padding: 0;
+            padding: 5px;
+            box-sizing: border-box;
+            pointer-events: none;
         }
 
-        /* Columns for description */
         .description .col {
-            padding: 10px;
+            padding: 0;
+            pointer-events: auto;
+            user-select: text; /* Enable text selection within description */
         }
 
-        /* Ensure the 4th column spans 2 columns */
         .description .col:nth-child(4) {
             grid-column: span 2;
             text-align: left;
@@ -104,6 +125,17 @@
         .description p {
             margin: 0;
         }
+
+        .description .cv {
+            text-align: right;
+            justify-self: end;
+            align-self: center;
+        }
+
+        /* Prevent images from being selectable */
+        img {
+            user-select: none; /* Disable text selection on images */
+        }
     </style>
 </head>
 <body>
@@ -111,17 +143,14 @@
         <p>Aksel Løvstad</p>
         <p>Graphic Design</p>
         <p>Type Design</p>
-        <p>Contact</p>
         <p>PDF Portfolio</p>
         <p>CV</p>
     </header>
 
     <footer>
         <p>&copy; 2025 Aksel Løvstad</p>
-        <p></p>
         <p>Org. nr. 923491716</p>
         <p>Jon P Erliens vei 10</p>
-        <p></p>
         <p>Oslo, Norge</p>
     </footer>
 
@@ -131,10 +160,9 @@
         <div class="col" id="project-institution">KHiO</div>
         <div class="col" id="project-year">2024</div>
         <div class="col">
-            <p id="project-description">This project explores design concepts related to typefaces and graphic compositions. It blends traditional methods with modern digital techniques to create a unique visual identity for the project. The result is a harmonious design that represents both the past and the future of graphic design.</p>
+            <p id="project-description">This project explores design concepts related to typefaces and graphic compositions. It blends traditional methods with modern digital techniques to create a unique visual identity for the project.</p>
         </div>
-        <div class="col"></div> <!-- Empty column for spacing -->
-        <div class="col"></div> <!-- Empty column for spacing -->
+        <div class="col"></div>
     </div>
 
     <script>
@@ -163,66 +191,58 @@
         ];
 
         let currentImageIndex = 0;
+        let imageCount = 0;
 
         const projectNameElement = document.getElementById('project-name');
         const projectInstitutionElement = document.getElementById('project-institution');
         const projectYearElement = document.getElementById('project-year');
         const projectDescriptionElement = document.getElementById('project-description');
+        const displayedImages = [];
 
         function updateDescription() {
             const currentFolder = images[currentImageIndex].folder;
             const categoryDetails = imageCategories[currentFolder];
-            
-            // Update project name, institution, year, and description dynamically
             projectNameElement.innerText = categoryDetails.name;
             projectInstitutionElement.innerText = categoryDetails.institution;
             projectYearElement.innerText = categoryDetails.year;
             projectDescriptionElement.innerText = categoryDetails.description;
         }
 
-        // Number of images allowed to be displayed at the same time
-        const maxImages = 5;
-
         function createFixedImage(event) {
-            // Create a new image element
+            if (imageCount >= 5) {
+                const oldestImage = displayedImages.shift();
+                oldestImage.remove();
+                imageCount--;
+            }
+
             const newFixedImage = document.createElement('img');
             newFixedImage.src = images[currentImageIndex].src;
             newFixedImage.alt = images[currentImageIndex].description;
             newFixedImage.className = 'fixed-image';
             newFixedImage.draggable = false;
-            newFixedImage.setAttribute('loading', 'lazy');  // Apply lazy loading
+            newFixedImage.setAttribute('loading', 'lazy');
 
             newFixedImage.style.left = `${event.pageX}px`;
             newFixedImage.style.top = `${event.pageY}px`;
-            newFixedImage.style.transform = "translate(-50%, -50%)";
-            document.body.appendChild(newFixedImage);
 
-            // Update the project details after the image is placed
+            document.body.insertBefore(newFixedImage, document.querySelector('footer'));
+            displayedImages.push(newFixedImage);
+            imageCount++;
+
             updateDescription();
-
-            // Keep track of the total number of images
-            const allImages = document.querySelectorAll('.fixed-image');
-
-            // If there are more than 'maxImages' displayed, remove the oldest one
-            if (allImages.length > maxImages) {
-                const oldestImage = allImages[0];  // The first image added is the oldest
-                oldestImage.remove();
-            }
         }
 
         document.addEventListener('click', (event) => {
-            if (event.button === 0) {
-                event.preventDefault();
+            // Ignore clicks within header, footer, or description (don't trigger image creation)
+            const isText = event.target.closest('header') || event.target.closest('footer') || event.target.closest('.description');
+            if (isText) return;
 
-                // Create the fixed image at the clicked position
-                createFixedImage(event);
-
-                // Update to the next image
-                currentImageIndex = (currentImageIndex + 1) % images.length;
-            }
+            // Allow image creation outside text areas
+            event.preventDefault();
+            createFixedImage(event);
+            currentImageIndex = (currentImageIndex + 1) % images.length;
         });
 
-        // Initialize the first description on page load
         updateDescription();
     </script>
 </body>
