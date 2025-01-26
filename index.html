@@ -15,11 +15,13 @@
             background-color: #000;
             font-size: 14px;
             color: white;
-            user-select: none; /* Disable text selection globally */
+            user-select: none;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            overflow: hidden; /* Prevent page scrolling */
         }
+
 
         ::selection {
             background-color: #fff;
@@ -125,17 +127,31 @@
 
     <script>
         const imageCategories = {
-            'visuell-identitet': { name: '11 Minutter', institution: 'KHiO', year: '2023', description: 'This project explores design concepts related to typefaces and graphic compositions.' },
-            'locm': { name: 'List of Common Misconceptions', institution: 'KHiO', year: '2024', description: 'A project exploring visual storytelling and typography, addressing common misconceptions in the design world.' }
+            'total-grotesk': { name: 'Total Grotesk', institution: 'Selvinitiert', year: '2023–2024', description: 'This project explores the design of a new typeface, Total Grotesk, inspired by the Swiss design movement.' },
+            'locm': { name: 'List of Common Misconceptions', institution: 'KHiO', year: '2024', description: 'A project exploring visual storytelling and typography, addressing common misconceptions in the design world.' },
+            'visuell-identitet': { name: '11 Minutter', institution: 'KHiO', year: '2023', description: 'This project explores design concepts related to typefaces and graphic compositions.' }
         };
 
         const images = [
-            { src: './media/visuell-identitet/11-minutter-dektop-1.0.jpg', description: 'First Image', folder: 'visuell-identitet' },
-            { src: './media/visuell-identitet/11-minutter-dektop-2.0.jpg', description: 'Second Image', folder: 'visuell-identitet' },
-            { src: './media/visuell-identitet/11-minutter-mobile-1.0.jpg', description: 'Third Image', folder: 'visuell-identitet' },
-            { src: './media/locm/locm-scan-54-55.png', description: 'Fourth Image', folder: 'locm' },
-            { src: './media/locm/locm-scan-102-103.png', description: 'Seventh Image', folder: 'locm' },
-            { src: './media/locm/locm-foto-1.0.jpg', description: 'Sixth Image', folder: 'locm' },
+            /* Total Grotesk */
+            { src: './media/total-grotesk/total-grotesk-fold-1.0.jpg', description: 'Total Grotesk Image', folder: 'total-grotesk' },
+            { src: './media/total-grotesk/total-grotesk-pampflett-1.0.png', description: 'Total Grotesk Image', folder: 'total-grotesk' },
+            { src: './media/total-grotesk/total-grotesk-fold-2.0.jpg', description: 'Total Grotesk Image', folder: 'total-grotesk' },
+            { src: './media/total-grotesk/total-grotesk-fold-3.0.jpg', description: 'Total Grotesk Image', folder: 'total-grotesk' },
+            { src: './media/total-grotesk/total-grotesk-scan-A3-6.0.jpg', description: 'Total Grotesk Image', folder: 'total-grotesk' },
+            { src: './media/total-grotesk/total-grotesk-svg-1.0.png', description: 'Total Grotesk Image', folder: 'total-grotesk' },
+
+            /* List of Common Misconceptions*/
+            { src: './media/locm/locm-scan-54-55.png', description: 'List of Common Misconceptions scan', folder: 'locm' },
+            { src: './media/locm/locm-scan-66-67.png', description: 'List of Common Misconceptions scan', folder: 'locm' },
+            { src: './media/locm/locm-scan-102-103.png', description: 'List of Common Misconceptions scan', folder: 'locm' },
+            { src: './media/locm/locm-scan-n-184.png', description: 'List of Common Misconceptions scan', folder: 'locm' },
+            { src: './media/locm/locm-foto-1.0.jpg', description: 'List of Common Misconceptions Image', folder: 'locm' },
+
+            /* 11 minutter*/
+            { src: './media/visuell-identitet/11-minutter-dektop-1.0.jpg', description: '11 Minutter Image', folder: 'visuell-identitet' },
+            { src: './media/visuell-identitet/11-minutter-dektop-2.0.jpg', description: '11 Minutter Image', folder: 'visuell-identitet' },
+            { src: './media/visuell-identitet/11-minutter-mobile-1.0.jpg', description: '11 Minutter Image', folder: 'visuell-identitet' },
         ];
 
         let currentImageIndex = 0;
@@ -180,7 +196,16 @@
             newFixedImage.src = newImage.src;
             newFixedImage.alt = newImage.description;
             newFixedImage.className = 'fixed-image';
+            newFixedImage.loading = 'lazy'; // Enable lazy loading
 
+            // Apply custom size for the specific image (total-grotesk-svg-1.0.png)
+            if (newImage.src.includes('total-grotesk-svg-1.0.png')) {
+                newFixedImage.style.maxWidth = '80%'; // Increase max width
+                newFixedImage.style.maxHeight = '80vh'; // Increase max height
+
+            }
+
+            // Position the image off-screen as per the existing logic
             newFixedImage.style.left = `${event.pageX}px`;
             newFixedImage.style.top = `${event.pageY}px`;
 
@@ -195,6 +220,7 @@
             // Move to the next image
             currentImageIndex = (currentImageIndex + 1) % images.length;
         }
+
 
         document.addEventListener('click', (event) => {
             if (!hasClicked) {
