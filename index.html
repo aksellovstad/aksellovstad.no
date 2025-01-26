@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aksel Løvstad - Graphic Design</title>
     <style>
-        /* Overall Body Layout */
+        /* Overall body setup */
         body {
             font-family: sans-serif;
             margin: 0;
@@ -13,79 +13,42 @@
             box-sizing: border-box;
             position: relative;
             min-height: 100vh;
-            background-color: #f4f4f9;
+            background-color: #000; /* Black background */
+            font-size: 14px;
+            color: white; /* White text color */
+            user-select: none; /* Disable text selection globally */
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            overflow: hidden;
-            font-size: 14px;
-            user-select: none; /* Disable text selection globally */
         }
-
-        /* Text selection styles */
+    
         ::selection {
-            background-color: #000;
-            color: white;
+            background-color: #fff; /* White background when selected */
+            color: black; /* Black text when selected */
         }
-
-        /* Header section */
-        header {
-            color: #000;
-            text-align: left;
-            width: 100%;
+    
+        /* Header and Footer styles */
+        header, footer {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
             gap: 10px;
-            background: none;
-            position: sticky;
-            top: 0;
             padding: 5px;
-            box-sizing: border-box;
+            background: none;
             z-index: 3;
         }
-
-        header p {
+    
+        header p, footer p {
             margin: 0;
-            cursor: text; /* Change cursor to text when hovering over text */
+            cursor: text;
+            color: white; /* White text */
+            user-select: text; /* Enable text selection */
         }
-
-        header p:hover {
-            user-select: text; /* Enable text selection when hovering */
-        }
-
-        header p:nth-child(6) {
-            text-align: right;
-        }
-
-        /* Footer section */
+    
         footer {
-            color: #000;
-            text-align: left;
-            width: 100%;
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 10px;
-            background: none;
             margin-top: auto;
-            padding: 5px;
-            box-sizing: border-box;
-            z-index: 3;
         }
-
-        footer p {
-            margin: 0;
-            cursor: text; /* Change cursor to text when hovering over text */
-        }
-
-        footer p:hover {
-            user-select: text; /* Enable text selection when hovering */
-        }
-
-        footer p:nth-child(6) {
-            text-align: right;
-        }
-
-        /* Fixed Image */
+    
+        /* Image styles */
         .fixed-image {
             position: absolute;
             object-fit: contain;
@@ -95,11 +58,11 @@
             pointer-events: none;
             transform: translate(-50%, -50%);
         }
-
+    
         /* Description section */
         .description {
             position: absolute;
-            top: 85%;
+            top: 75%;
             left: 0;
             width: 100%;
             display: grid;
@@ -108,41 +71,41 @@
             z-index: 2;
             padding: 5px;
             box-sizing: border-box;
-            pointer-events: none;
         }
-
+    
         .description .col {
             padding: 0;
-            pointer-events: auto;
-            user-select: text; /* Enable text selection within description */
+            color: white; /* White text */
+            user-select: text; /* Allow text selection */
+            display: inline-block; /* Makes the column only as big as the text */
+            height: auto; /* Ensures the container shrinks to fit the content */
         }
-
+    
         .description .col:nth-child(4) {
             grid-column: span 2;
             text-align: left;
+            align-self: start;
+            padding-top: 0; /* Ensure it aligns with the rest of the columns */
         }
-
-        .description p {
-            margin: 0;
-        }
-
+    
         .description .cv {
             text-align: right;
             justify-self: end;
             align-self: center;
         }
-
-        /* Prevent images from being selectable */
+    
         img {
             user-select: none; /* Disable text selection on images */
         }
     </style>
+    
 </head>
 <body>
     <header>
         <p>Aksel Løvstad</p>
-        <p>Graphic Design</p>
-        <p>Type Design</p>
+        <p>Graphic and Type Design</p>
+        <p></p> <!-- Empty -->
+        <p>Contact</p>
         <p>PDF Portfolio</p>
         <p>CV</p>
     </header>
@@ -162,88 +125,101 @@
         <div class="col">
             <p id="project-description">This project explores design concepts related to typefaces and graphic compositions. It blends traditional methods with modern digital techniques to create a unique visual identity for the project.</p>
         </div>
-        <div class="col"></div>
+        <div class="col" class="cv"></div>
     </div>
 
-    <script>
-        // Categorizing the images by folder
-        const imageCategories = {
-            'visuell-identitet': {
-                name: '11 Minutter', 
-                institution: 'KHiO', 
-                year: '2023', 
-                description: 'This project explores design concepts related to typefaces and graphic compositions.'
-            },
-            'locm': {
-                name: 'List of Common Misconceptions', 
-                institution: 'KHiO', 
-                year: '2024', 
-                description: 'A project exploring visual storytelling and typography, addressing common misconceptions in the design world.'
-            }
-        };
+ <script>
+    // Categorizing the images by folder
+    const imageCategories = {
+        'visuell-identitet': {
+            name: '11 Minutter', 
+            institution: 'KHiO', 
+            year: '2023', 
+            description: 'This project explores design concepts related to typefaces and graphic compositions.'
+        },
+        'locm': {
+            name: 'List of Common Misconceptions', 
+            institution: 'KHiO', 
+            year: '2024', 
+            description: 'A project exploring visual storytelling and typography, addressing common misconceptions in the design world.'
+        }
+    };
 
-        // List of images with their paths
-        const images = [
-            { src: './media/visuell-identitet/11-minutter-dektop-1.0.jpg', description: 'First Image', folder: 'visuell-identitet' },
-            { src: './media/visuell-identitet/11-minutter-dektop-2.0.jpg', description: 'Second Image', folder: 'visuell-identitet' },
-            { src: './media/visuell-identitet/11-minutter-mobile-1.0.jpg', description: 'Third Image', folder: 'visuell-identitet' },
-            { src: './media/locm/locm-scan-54-55.png', description: 'Fourth Image', folder: 'locm' }
-        ];
+    // List of images
+    const images = [
+        { src: './media/visuell-identitet/11-minutter-dektop-1.0.jpg', description: 'First Image', folder: 'visuell-identitet' },
+        { src: './media/visuell-identitet/11-minutter-dektop-2.0.jpg', description: 'Second Image', folder: 'visuell-identitet' },
+        { src: './media/visuell-identitet/11-minutter-mobile-1.0.jpg', description: 'Third Image', folder: 'visuell-identitet' },
+        { src: './media/locm/locm-scan-54-55.png', description: 'Fourth Image', folder: 'locm' }
+    ];
 
-        let currentImageIndex = 0;
-        let imageCount = 0;
+    let currentImageIndex = 0;
+    const displayedImages = [];
+    const maxImages = 5;
 
-        const projectNameElement = document.getElementById('project-name');
-        const projectInstitutionElement = document.getElementById('project-institution');
-        const projectYearElement = document.getElementById('project-year');
-        const projectDescriptionElement = document.getElementById('project-description');
-        const displayedImages = [];
+    function updateDescription() {
+        const currentFolder = images[currentImageIndex].folder;
+        const categoryDetails = imageCategories[currentFolder];
+        document.getElementById('project-name').innerText = categoryDetails.name;
+        document.getElementById('project-institution').innerText = categoryDetails.institution;
+        document.getElementById('project-year').innerText = categoryDetails.year;
+        document.getElementById('project-description').innerText = categoryDetails.description;
+    }
 
-        function updateDescription() {
-            const currentFolder = images[currentImageIndex].folder;
-            const categoryDetails = imageCategories[currentFolder];
-            projectNameElement.innerText = categoryDetails.name;
-            projectInstitutionElement.innerText = categoryDetails.institution;
-            projectYearElement.innerText = categoryDetails.year;
-            projectDescriptionElement.innerText = categoryDetails.description;
+    function createFixedImage(event) {
+        if (displayedImages.length >= maxImages) {
+            const oldestImage = displayedImages.shift(); // Remove the oldest image
+            oldestImage.remove();
         }
 
-        function createFixedImage(event) {
-            if (imageCount >= 5) {
-                const oldestImage = displayedImages.shift();
-                oldestImage.remove();
-                imageCount--;
-            }
+        const newFixedImage = document.createElement('img');
+        newFixedImage.src = images[currentImageIndex].src;
+        newFixedImage.alt = images[currentImageIndex].description;
+        newFixedImage.className = 'fixed-image';
 
-            const newFixedImage = document.createElement('img');
-            newFixedImage.src = images[currentImageIndex].src;
-            newFixedImage.alt = images[currentImageIndex].description;
-            newFixedImage.className = 'fixed-image';
-            newFixedImage.draggable = false;
-            newFixedImage.setAttribute('loading', 'lazy');
+        newFixedImage.style.left = `${event.pageX}px`;
+        newFixedImage.style.top = `${event.pageY}px`;
 
-            newFixedImage.style.left = `${event.pageX}px`;
-            newFixedImage.style.top = `${event.pageY}px`;
+        document.body.appendChild(newFixedImage);
+        displayedImages.push(newFixedImage); // Add to the displayed images list
 
-            document.body.insertBefore(newFixedImage, document.querySelector('footer'));
-            displayedImages.push(newFixedImage);
-            imageCount++;
+        updateDescription(); // Update description after image change
+        currentImageIndex = (currentImageIndex + 1) % images.length; // Move to the next image
+    }
 
-            updateDescription();
+    // Function to check if text is selected
+    function isTextSelected() {
+        const selection = window.getSelection();
+        return selection.toString().length > 0;
+    }
+
+    // Function to deselect text
+    function deselectText() {
+        const selection = window.getSelection();
+        if (selection && selection.removeAllRanges) {
+            selection.removeAllRanges(); // Deselect the text
+        }
+    }
+
+    document.addEventListener('click', (event) => {
+        // Ignore clicks on header, footer, or description (don't trigger image creation)
+        if (event.target.closest('header') || event.target.closest('footer') || event.target.closest('.description')) {
+            return; // Don't trigger image creation if clicking inside text or header/footer
         }
 
-        document.addEventListener('click', (event) => {
-            // Ignore clicks within header, footer, or description (don't trigger image creation)
-            const isText = event.target.closest('header') || event.target.closest('footer') || event.target.closest('.description');
-            if (isText) return;
+        // Deselect text when clicking anywhere
+        deselectText();
 
-            // Allow image creation outside text areas
-            event.preventDefault();
-            createFixedImage(event);
-            currentImageIndex = (currentImageIndex + 1) % images.length;
-        });
+        // If there is any selected text, skip the image creation
+        if (isTextSelected()) {
+            return; // Don't trigger image creation if text is highlighted
+        }
 
-        updateDescription();
-    </script>
+        // If no text is selected, create an image on click
+        createFixedImage(event);
+    });
+</script>
+
+    
 </body>
 </html>
