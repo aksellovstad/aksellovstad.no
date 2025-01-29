@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aksel Løvstad</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 5px;
+            box-sizing: border-box;
+            position: relative;
+            min-height: 100vh;
+            background-color: #000;
+            font-size: 14px;
+            color: white;
+            user-select: none; /* Prevent text selection on the body */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden; 
+            transition: all 0.3s ease; /* Add smooth transitions */
+        }
+
+        ::selection {
+            background-color: #fff;
+            color: black;
+        }
+
+        header, footer {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
+            padding: 5px;
+            background: none;
+            z-index: 2;
+        }
+
+        header p, footer p {
+            margin: 0;
+            color: white;
+            user-select: text; /* Enable text selection only in specific areas */
+        }
+
+        footer {
+            margin-top: auto;
+        }
+
+        a {
+            text-decoration: none; /* Remove underline from the link */
+            color: white; /* Ensure link text is white */
+            cursor: pointer; /* Change to the pointer hand cursor */
+            transition: color 0.3s ease; /* Smooth color transition on hover */
+        }
+
+        a:hover {
+            color: #ccc; /* Slight color change on hover */
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html">
+            <p>Aksel Løvstad</p>
+        </a>
+        <p>Type and Graphic Design</p>
+        <p></p> <!-- Empty -->
+        <p>Contact</p>
+        <p>PDF Portfolio</p>
+        <p>CV</p>
+    </header>
+
+    <footer>
+        <p>&copy; 2025 Aksel Løvstad</p>
+        <p>Org. nr. 923491716</p>
+        <p>Jon P Erliens vei 10</p>
+        <p>Oslo, Norway</p>
+    </footer>
+
+    <script>
+        document.addEventListener('click', (event) => {
+            const selection = window.getSelection();
+
+            // If text is selected, remove the selection when clicking anywhere outside the header/footer
+            if (selection.rangeCount > 0 && !event.target.closest('header, footer')) {
+                selection.removeAllRanges(); // Deselect text
+            }
+        });
+    </script>
+</body>
+</html>
