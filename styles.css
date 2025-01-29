@@ -1,0 +1,135 @@
+/* Global styles */
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 5px;
+    box-sizing: border-box;
+    position: relative;
+    min-height: 100vh;
+    background-color: #000;
+    font-size: 14px;
+    color: white;
+    user-select: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden; /* Prevent page scrolling */
+}
+
+::selection {
+    background-color: #fff;
+    color: black;
+}
+
+/* Header and Footer */
+header, footer {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+    padding: 5px;
+    background: none;
+    z-index: 2;
+}
+
+/* Paragraphs in header and footer */
+header p, footer p {
+    text-decoration: none;
+    margin: 0;
+    cursor: text;
+    color: white;
+    user-select: text; /* Enable text selection */
+}
+
+/* CV link styling */
+header a {
+    text-decoration: none;
+    color: white;
+    text-align: right; /* Align the CV link */
+}
+
+header a:hover {
+    color: #39FF14;
+}
+
+/* Footer positioning */
+footer {
+    margin-top: auto;
+}
+
+/* Image and video styling */
+.fixed-image, .fixed-video {
+    position: absolute;
+    z-index: 1;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+}
+
+/* Image-specific styles */
+.fixed-image {
+    object-fit: contain;
+    max-height: 60vh;
+    max-width: 40%;
+}
+
+/* Video-specific styles */
+.fixed-video {
+    width: 40%;
+    max-height: 50vh;
+}
+
+/* Description section styling */
+.description, .cv-description {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+    z-index: 2;
+    padding: 5px;
+    box-sizing: border-box;
+    visibility: hidden; /* Hidden by default */
+}
+
+/* Description section position */
+.description {
+    top: 85%;
+}
+
+.cv-description {
+    top: 60%; /* Moves the CV section higher than the description */
+}
+
+/* Column styles in description and CV section */
+.description .col, .cv-description .col {
+    padding: 0;
+    color: white;
+    user-select: text;
+    display: inline-block;
+    height: auto;
+}
+
+/* Special styling for certain columns */
+.description .col:nth-child(4) {
+    grid-column: span 2;
+    text-align: left;
+    align-self: start;
+    padding-top: 0;
+}
+
+.description .cv {
+    text-align: right;
+    justify-self: end;
+    align-self: center;
+}
+
+/* Double size images */
+.double-size {
+    max-width: 80%; /* Double the default 40% */
+    max-height: 120vh; /* Double the default 60vh */
+}
+
+/* Prevent images and videos from being selected */
+img, video {
+    user-select: none;
+}
