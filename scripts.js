@@ -33,17 +33,16 @@ const images = [
     { src: './media/visuell-identitet/11-minutter-mobile-1.0.jpg', description: '11 Minutter Image', folder: 'visuell-identitet' },
 
     /* Wuxia */
-    { src: './media/redaksjonell-design/scan/tidsskrift-scan-10-11.jpg', description: 'Magazine scan', folder: 'redaksjonell-design' },
-    { src: './media/redaksjonell-design/scan/tidsskrift-scan-24-25.jpg', description: 'Magazine scan', folder: 'redaksjonell-design' },
-    { src: './media/redaksjonell-design/scan/tidsskrift-scan-30-31.jpg', description: 'Magazine scan', folder: 'redaksjonell-design' },
     { src: './media/redaksjonell-design/tidsskrift-foto-5.0.jpg', description: 'Magazine photo', folder: 'redaksjonell-design' },
-    { src: './media/redaksjonell-design/scan/tidsskrift-scan-60-61.jpg', description: 'Magazine scan', folder: 'redaksjonell-design' },
-    { src: './media/redaksjonell-design/scan/tidsskrift-scan-72-73.jpg', description: 'Magazine scan', folder: 'redaksjonell-design' },
-    { src: './media/redaksjonell-design/scan/tidsskrift-scan-100-101.jpg', description: 'Magazine scan', folder: 'redaksjonell-design' },
+    { src: './media/redaksjonell-design/scan/wuxia-scan-10-11.png', description: 'Magazine scan', folder: 'redaksjonell-design' },
+    { src: './media/redaksjonell-design/scan/wuxia-scan-24-25.png', description: 'Magazine scan', folder: 'redaksjonell-design' },
+    { src: './media/redaksjonell-design/scan/wuxia-scan-30-31.png', description: 'Magazine scan', folder: 'redaksjonell-design' },
+    { src: './media/redaksjonell-design/scan/wuxia-scan-60-61.png', description: 'Magazine scan', folder: 'redaksjonell-design' },
+    { src: './media/redaksjonell-design/scan/wuxia-scan-72-73.png', description: 'Magazine scan', folder: 'redaksjonell-design' },
+    { src: './media/redaksjonell-design/scan/wuxia-scan-100-101.png', description: 'Magazine scan', folder: 'redaksjonell-design' },
     { src: './media/redaksjonell-design/tidsskrift-foto-9.0.jpg', description: 'Magazine photo', folder: 'redaksjonell-design' },
 
     /* Work in Progress */
-
     { src: './media/wip/wip-arrondis-5.0.png', description: 'Serif Work in Progress', folder: 'wip' },
     { src: './media/wip/wip-arrondis-1.0.png', description: 'Serif Work in Progress', folder: 'wip' },
     { src: './media/wip/wip-arrondis-2.0.png', description: 'Serif Work in Progress', folder: 'wip' },
@@ -120,9 +119,18 @@ function createFixedImage(event) {
         newFixedElement.loading = 'lazy'; // Enable lazy loading
     }
     
-    {if (newImage.src === './media/wip/wip-arrondis-5.0.png') {
+    {if (newImage.src === './media/wip/wip-arrondis-5.0.png' ) {
         newFixedElement.classList.add('double-size');}
     }
+
+    {if (newImage.src === './media/total-grotesk/total-condensed-1.0.gif' ) {
+        newFixedElement.classList.add('onefifthy-size');}
+    }
+
+    {if (newImage.src === './media/locm/locm-foto-2.0.jpg') {
+        newFixedElement.classList.add('onefifthy-size');}
+    }
+
 
     // Position the element
     newFixedElement.style.left = `${event.pageX}px`;
